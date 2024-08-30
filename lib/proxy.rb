@@ -18,12 +18,12 @@ class Proxy < Rack::Proxy
       # call super and tap the returned response which is a rack triplet [status, headers, body]
       # see https://github.com/ncr/rack-proxy/blob/v0.7.7/lib/rack/proxy.rb#L96
       super.tap { |response| env["warden"].authenticate! if forbidden_response?(response) }
-           .then { |response| set_auth_bypass_cookie(response, env) }      
+           .then { |response| set_auth_bypass_cookie(response, env) }
     else
       debug_logging(env, "Request not being proxied: #{path}")
       @app.call(env)
     end
-  end  
+  end
 
   def proxy?(path)
     !healthcheck_path?(path) && !publishing_platform_sso_path?(path)
@@ -50,7 +50,7 @@ class Proxy < Rack::Proxy
       headers.reject { |key, _| %w[status].include?(key) },
       body,
     ]
-  end  
+  end
 
 private
 
@@ -84,31 +84,31 @@ private
     )
 
     response
-  end  
+  end
 
   def get_auth_bypass_cookie(env)
     cookie = Rack::Utils.parse_cookies(env)
     cookie["auth_bypass_token"] if cookie
-  end  
+  end
 
-  def forbidden_response?(response)  
+  def forbidden_response?(response)
     response[0] == "403"
-  end  
+  end
 
   def process_token(token, env)
     payload, _header = JWT.decode(token, ENV["JWT_AUTH_SECRET"], true, { algorithm: "HS256" })
     env["HTTP_PUBLISHING_PLATFORM_AUTH_BYPASS_ID"] = payload["sub"] if payload.key?("sub")
   rescue JWT::DecodeError
     nil
-  end  
+  end
 
   def add_authenticated_user_header(env)
     env["HTTP_X_PUBLISHING_PLATFORM_AUTHENTICATED_USER"] = if env["warden"].user
-                                               env["warden"].user.uid.to_s
-                                             else
-                                               "invalid"
-                                             end
-  end  
+                                                             env["warden"].user.uid.to_s
+                                                           else
+                                                             "invalid"
+                                                           end
+  end
 
   def healthcheck_path?(path)
     path == "/up"
@@ -122,7 +122,7 @@ private
     return unless env["action_dispatch.logger"]
 
     env["action_dispatch.logger"].debug(message)
-  end  
+  end
 
   # Content-Length header can end up with an incorrect value as Net::HTTP will
   # decompress a body of a gzipped request but pass throguh the Content-Length
@@ -138,9 +138,9 @@ private
       headers.delete(content_length_header)
     end
     body.map(&:bytesize)
-  end  
+  end
 
   def allow_iframing(headers)
     headers.delete("X-Frame-Options")
-  end  
+  end
 end
