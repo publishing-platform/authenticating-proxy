@@ -35,6 +35,7 @@ class Proxy < Rack::Proxy
     # HTTP HOST header removed as it can supersede backend host
     env.delete("HTTP_HOST")
     add_authenticated_user_header(env)
+    add_authenticated_user_organisation_header(env)
     env
   end
 
@@ -110,8 +111,16 @@ private
                                                            end
   end
 
+  def add_authenticated_user_organisation_header(env)
+    env["HTTP_X_PUBLISHING_PLATFORM_AUTHENTICATED_USER_ORGANISATION"] = if env["warden"].user
+                                                                          env["warden"].user.organisation_content_id.to_s
+                                                                        else
+                                                                          "invalid"
+                                                                        end
+  end
+
   def healthcheck_path?(path)
-    path == "/up"
+    %w[/healthcheck/live /healthcheck/ready].include? path
   end
 
   def publishing_platform_sso_path?(path)
