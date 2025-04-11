@@ -7,7 +7,7 @@ gem "bootsnap", require: false
 gem "pg", "~> 1.5"
 gem "publishing_platform_app_config"
 gem "publishing_platform_location"
-gem "publishing_platform_sso", path: "../publishing_platform_sso"
+gem "publishing_platform_sso"
 gem "puma", ">= 5.0"
 gem "rack-proxy"
 gem "tzinfo-data", platforms: %i[mswin mswin64 mingw x64_mingw jruby]
