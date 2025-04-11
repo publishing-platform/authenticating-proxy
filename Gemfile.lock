@@ -349,7 +349,6 @@ DEPENDENCIES
   publishing_platform_location
   publishing_platform_rubocop
   publishing_platform_sso
-  puma (>= 5.0)
   rack-proxy
   rails (= 7.2.2)
   rspec-rails
