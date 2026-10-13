@@ -4,7 +4,7 @@ source "https://rubygems.org"
 gem "rails", "8.0.2.1"
 
 gem "bootsnap", require: false
-gem "pg", "~> 1.6"
+gem "pg", "~> 1.7"
 gem "publishing_platform_app_config"
 gem "publishing_platform_location"
 gem "publishing_platform_sso"
